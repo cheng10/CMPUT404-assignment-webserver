@@ -1,7 +1,7 @@
 #  coding: utf-8 
 import SocketServer
 
-# Copyright 2013 Abram Hindle, Eddie Antonio Santos
+# Copyright 2016 Abram Hindle, Cheng Chen, Eddie Antonio Santos
 # 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -32,7 +32,9 @@ class MyWebServer(SocketServer.BaseRequestHandler):
     def handle(self):
         self.data = self.request.recv(1024).strip()
         print ("Got a request of: %s\n" % self.data)
-        self.request.sendall("OK")
+
+	#self.request.sendall("Hello, World!")	
+	self.request.sendall(self.data)
 
 if __name__ == "__main__":
     HOST, PORT = "localhost", 8080

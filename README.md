@@ -15,6 +15,7 @@ Generally everything is LICENSE'D under the Apache 2 license by Abram Hindle.
 server.py contains contributions from:
 
 * Abram Hindle
+* Cheng Chen
 * Eddie Antonio Santos
 
 But the server.py example is derived from the python documentation
