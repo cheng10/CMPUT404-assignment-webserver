@@ -45,6 +45,9 @@ class MyWebServer(SocketServer.BaseRequestHandler):
 		self.send_content(contents)
 
 	def send_content(self, contents):
+		header =  "HTTP/1.1 200 OK\r\n" + \
+                    "Content-type:" + "text/html" +"\r\n\r\n"
+		self.request.sendall(header)
 		self.request.sendall(contents)
 
 	def read_file(self, uri):
