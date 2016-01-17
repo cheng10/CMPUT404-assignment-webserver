@@ -1,5 +1,5 @@
 #  coding: utf-8 
-import SocketServer 
+import SocketServer, os
 
 # Copyright 2016 Abram Hindle, Cheng Chen, Eddie Antonio Santos
 # 
@@ -33,14 +33,19 @@ class MyWebServer(SocketServer.BaseRequestHandler):
 		self.data = self.request.recv(1024).strip()
 		print ("Got a request of: %s\n" % self.data)
 
-		#self.request.sendall("Hello, World!")	
-		#self.request.sendall(self.data)
-
 		uri=self.data.split()[1]
 		
 		if(uri=="/" or uri=="/favicon.ico" ):
 			uri="/index.html"
-		
+		elif(uri=="/deep" or uri=="/deep/"):
+			uri="/deep/index.html"
+		elif(uri=="/deep.css"):
+			uri="/deep/deep.css"
+		elif(not os.path.exists("www"+uri)):
+			self.error_404()
+		elif("/../" in uri):
+			self.error_404()			
+	
 		filetype=uri.split(".")[1]
 
 		self.response(uri,filetype)
@@ -61,6 +66,13 @@ class MyWebServer(SocketServer.BaseRequestHandler):
 		myfile.close()
 		return filecontent
 
+	def error_404(self):
+		http_status="HTTP/1.1 404 Not Found\n"
+		content="Content-type: text/html\n\n"+\
+			"<html><head></head><body>"+\
+			"<h1><center>404 page not found</center></h1></body></html>\n"
+		self.request.sendall(http_status)
+		self.request.sendall(content)
 		
 if __name__ == "__main__":
 	HOST, PORT = "localhost", 8080
