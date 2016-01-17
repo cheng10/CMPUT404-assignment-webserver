@@ -41,13 +41,16 @@ class MyWebServer(SocketServer.BaseRequestHandler):
 		if(uri=="/" or uri=="/favicon.ico" ):
 			uri="/index.html"
 		
-		contents=self.read_file("www"+uri)
-		self.send_content(contents)
+		filetype=uri.split(".")[1]
 
-	def send_content(self, contents):
-		header =  "HTTP/1.1 200 OK\r\n" + \
-                    "Content-type:" + "text/html" +"\r\n\r\n"
-		self.request.sendall(header)
+		self.response(uri,filetype)
+
+	def response(self, uri, filetype):
+		contents=self.read_file("www"+uri)
+		http_status="HTTP/1.1 200 OK\n"
+		mime_type="Content-type:" + "text/"+filetype +"\n\n"
+		self.request.sendall(http_status)
+		self.request.sendall(mime_type)
 		self.request.sendall(contents)
 
 	def read_file(self, uri):
