@@ -38,7 +38,7 @@ class MyWebServer(SocketServer.BaseRequestHandler):
 
 		uri=self.data.split()[1]
 		
-		if(uri=="/"):
+		if(uri=="/" or uri=="/favicon.ico" ):
 			uri="/index.html"
 		
 		contents=self.read_file("www"+uri)
