@@ -36,9 +36,9 @@ class MyWebServer(SocketServer.BaseRequestHandler):
 		uri=self.data.split()[1]
 		
 		if(uri=="/" or uri=="/favicon.ico" ):
-			uri="/index.html"
+			self.redirect_301("/index.html")
 		elif(uri=="/deep" or uri=="/deep/"):
-			uri="/deep/index.html"
+			self.redirect_301("/deep/index.html")
 		elif(uri=="/deep.css"):
 			uri="/deep/deep.css"
 		elif(not os.path.exists("www"+uri)):
@@ -65,6 +65,13 @@ class MyWebServer(SocketServer.BaseRequestHandler):
 			filecontent+=_
 		myfile.close()
 		return filecontent
+
+		
+	def redirect_301(self, location):
+		http_status="HTTP/1.1 301 Moved Permanently\n"
+		content="Location: http://"+str(HOST)+":"+str(PORT)+location+"\n\n"
+		self.request.sendall(http_status)
+		self.request.sendall(content)
 
 	def error_404(self):
 		http_status="HTTP/1.1 404 Not Found\n"
